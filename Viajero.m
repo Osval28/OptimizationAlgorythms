@@ -21,7 +21,9 @@ calcularTiempoRuta([13,4,5,6,12,11,10,9,1,2,3,7,8],T);
 
 esValido([13,4,5,6,12,11,10,9,1,2,3,7,8],valoresPermitidos);
 
-generarPoblacion(5, T, valoresPermitidos)
+poblacion = generarPoblacion(100, T, valoresPermitidos);
+
+disp(seleccionElitismo(poblacion,[poblacion.tiempo]));
 
 function tiempo = calcularTiempoRuta(ruta,tiempos)
     tiempo = 0;
@@ -49,18 +51,26 @@ function boolean = esValido(individuo,valoresPermitidos)
     end
 end
 
+function individuo = crearIndividuo(ruta, tiempo)
+individuo.cuerpo = ruta;
+individuo.tiempo = tiempo;
+individuo;
+end
+
 function poblacion = generarPoblacion(sizeK,tiempos,valoresPermitidos)
 poblacion = repmat(crearIndividuo(0,0),1,sizeK);
     for i = 1:sizeK
         individuo = randperm(13);
         poblacion(i) = crearIndividuo(individuo,calcularTiempoRuta(individuo,tiempos));
-        disp(poblacion(i));
     end
     poblacion;
 end
 
-function individuo = crearIndividuo(ruta, tiempo)
-    individuo.cuerpo = ruta;
-    individuo.tiempo = tiempo;
-    individuo;
+function seleccionados = seleccionElitismo(poblacion,parametrosMinimizar)
+    [~, orden] = sort([parametrosMinimizar]);
+    poblacion = poblacion(orden);
+    mitad = ceil(numel(poblacion) / 2);
+    disp(mitad);
+    seleccionados = poblacion(1:mitad);
+    
 end

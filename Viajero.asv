@@ -21,7 +21,9 @@ calcularTiempoRuta([13,4,5,6,12,11,10,9,1,2,3,7,8],T);
 
 esValido([13,4,5,6,12,11,10,9,1,2,3,7,8],valoresPermitidos);
 
-generarPoblacion(5, 3, T, valoresPermitidos)
+poblacion = generarPoblacion(5, T, valoresPermitidos);
+
+disp(cruce(poblacion));
 
 function tiempo = calcularTiempoRuta(ruta,tiempos)
     tiempo = 0;
@@ -49,18 +51,28 @@ function boolean = esValido(individuo,valoresPermitidos)
     end
 end
 
-function poblacion = generarPoblacion(sizeK,stages,tiempos,valoresPermitidos)
+function individuo = crearIndividuo(ruta, tiempo)
+individuo.cuerpo = ruta;
+individuo.tiempo = tiempo;
+individuo;
+end
+
+function poblacion = generarPoblacion(sizeK,tiempos,valoresPermitidos)
 poblacion = repmat(crearIndividuo(0,0),1,sizeK);
     for i = 1:sizeK
         individuo = randperm(13);
         poblacion(i) = crearIndividuo(individuo,calcularTiempoRuta(individuo,tiempos));
-        disp(p)
     end
     poblacion;
 end
 
-function individuo = crearIndividuo(ruta, tiempo)
-    individuo.cuerpo = ruta;
-    individuo.tiempo = tiempo;
-    individuo;
+function cruzados = cruceElitismo(poblacion)
+    [~, orden] = sort([poblacion.tiempo]);
+    poblacion = poblacion(orden);
+    mitad = floor(numel(poblacion) / 2);
+    padres = poblacion(1:mitad);
+    cruzados = padres;
+    for i = 1:2:(mitad - 1)
+        cruzados(i:i+1) = cruceOX(padres(i:i+1));
+    end
 end
