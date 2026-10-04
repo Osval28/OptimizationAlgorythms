@@ -15,3 +15,25 @@ function valor = calcularAckley(x, a, b, c)
     terminoCoseno = -exp(sum(cos(c * x)) / d);
     valor = terminoRaiz + terminoCoseno + a + 3;
 end
+
+function [valido, motivo] = esValido(x, limites, d)
+% ESVALIDO  Verifica que un individuo de Ackley cumpla las restricciones.
+%   x:       individuo (vector de numeros reales).
+%   limites: [minimo maximo] permitido para cada x_i.
+%   d:       (opcional) numero de dimensiones esperado.
+%   valido:  true si cumple todo.
+%   motivo:  texto con la primera restriccion que falla ('' si es valido).
+    valido = false;
+    if ~isnumeric(x) || ~isreal(x) || ~isvector(x)
+        motivo = 'no es un vector de numeros reales';
+    elseif nargin >= 3 && numel(x) ~= d
+        motivo = sprintf('tiene %d dimensiones y se esperaban %d', numel(x), d);
+    elseif any(~isfinite(x))
+        motivo = 'contiene NaN o Inf';
+    elseif any(x < limites(1) | x > limites(2))
+        motivo = sprintf('tiene valores fuera de [%g, %g]', limites(1), limites(2));
+    else
+        valido = true;
+        motivo = '';
+    end
+end

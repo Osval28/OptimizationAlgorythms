@@ -28,3 +28,39 @@ function Z = calcularInventario(Q, S, K, datos)
         Z = Z + datos.D(i) / Q(i) * faltante / datos.m(i);
     end
 end
+
+function [valido, motivo] = esValido(Q, S, K, datos, tolerancia)
+% ESVALIDO  Verifica que un individuo del inventario cumpla las restricciones.
+%   Q, S, K:    vectores de 5 elementos del individuo.
+%   datos:      struct con I, maxS y maxK (y maxQ, si decides definirlo).
+%   tolerancia: (opcional) diferencia maxima aceptada en la ecuacion 9.
+%               Por defecto 1e-6.
+%   valido:     true si cumple todo.
+%   motivo:     texto con la primera restriccion que falla ('' si es valido).
+    if nargin < 5
+        tolerancia = 1e-6;
+    end
+    n = numel(datos.maxS);
+    valido = false;
+    Q = Q(:)'; S = S(:)'; K = K(:)';   % todos como fila, para comparar elemento a elemento
+
+    if numel(Q) ~= n || numel(S) ~= n || numel(K) ~= n
+        motivo = sprintf('Q, S y K deben tener %d elementos cada uno', n);
+    elseif any(~isfinite([Q(:); S(:); K(:)]))
+        motivo = 'contiene NaN o Inf';
+    elseif any(Q <= 0)
+        motivo = 'algun Q es menor o igual que 0';
+    elseif isfield(datos, 'maxQ') && any(Q > datos.maxQ)
+        motivo = 'algun Q supera maxQ';
+    elseif any(S < 0 | S > datos.maxS)
+        motivo = 'algun S esta fuera de [0, maxS]';
+    elseif any(K < 0 | K > datos.maxK)
+        motivo = 'algun K esta fuera de [0, maxK]';
+    elseif abs(sum(Q/2 + S) - datos.I) > tolerancia
+        motivo = sprintf('no cumple la ecuacion 9: sum(Q/2 + S) = %g y debe ser %g', ...
+                         sum(Q/2 + S), datos.I);
+    else
+        valido = true;
+        motivo = '';
+    end
+end
