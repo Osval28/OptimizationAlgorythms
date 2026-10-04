@@ -47,5 +47,3 @@ function boolean = esValido(individuo,valoresPermitidos)
         boolean = false;
     end
 end
-
-function
