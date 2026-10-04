@@ -19,8 +19,9 @@ valoresPermitidos = [1,2,3,4,5,6,7,8,9,10,11,12,13];
 
 calcularTiempoRuta([13,4,5,6,12,11,10,9,1,2,3,7,8],T);
 
-esValido([13,4,5,6,12,11,10,9,1,2,3,7,8],valoresPermitidos)
+esValido([13,4,5,6,12,11,10,9,1,2,3,7,8],valoresPermitidos);
 
+generarPoblacion(5, 3, T, valoresPermitidos)
 
 function tiempo = calcularTiempoRuta(ruta,tiempos)
     tiempo = 0;
@@ -46,4 +47,20 @@ function boolean = esValido(individuo,valoresPermitidos)
     else
         boolean = false;
     end
+end
+
+function poblacion = generarPoblacion(sizeK,stages,tiempos,valoresPermitidos)
+poblacion = repmat(crearIndividuo(0,0),1,sizeK);
+    for i = 1:sizeK
+        individuo = randperm(13);
+        poblacion(i) = crearIndividuo(individuo,calcularTiempoRuta(individuo,tiempos));
+        disp(p)
+    end
+    poblacion;
+end
+
+function individuo = crearIndividuo(ruta, tiempo)
+    individuo.cuerpo = ruta;
+    individuo.tiempo = tiempo;
+    individuo;
 end
