@@ -66,11 +66,4 @@ poblacion = repmat(crearIndividuo(0,0),1,sizeK);
     poblacion;
 end
 
-function seleccionados = seleccionElitismo(poblacion,parametrosMinimizar)
-    [~, orden] = sort([parametrosMinimizar]);
-    poblacion = poblacion(orden);
-    mitad = ceil(numel(poblacion) / 2);
-    disp(mitad);
-    seleccionados = poblacion(1:mitad);
-    
-end
+
