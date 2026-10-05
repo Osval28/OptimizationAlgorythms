@@ -10,9 +10,7 @@ datos.maxK  = [500 2000 5000 1500 3000];          % K_i en [0, maxK_i]
 Q = [1000 2000 3000 1500 2500];
 S = [100 600 1200 400 700];
 K = [500 2000 5000 1500 3000];
-
-calcularInventario(Q,S,K,datos)
-
+calcularInventario(Q,S,[1,2])
 function Z = calcularInventario(Q, S, K, datos)
 % CALCULARINVENTARIO  Pedidos anuales no atendidos por falta de stock (ecuacion 8).
 %   Q, S, K: vectores de 5 elementos: monto por pedido de reabastecimiento,
@@ -26,16 +24,13 @@ function Z = calcularInventario(Q, S, K, datos)
 
     Z = 0;
     
+    
     for i = 1:numel(Q)
-        Z = Z + datos.D(i)/Q(i) .* integral(@(x) f(x,S,K,i,datos) ,S(i)+K(i),inf);
+        Z = Z + datos.D(i)/Q(i) * integral(((x-S(i)-K(i))/(datos.m(i)*sqrt(2*pi)*datos.sigma(i))*exp(-0.5*((x-datos.mu(i))/datos.sigma(i)).^2)),S(i)+K(i),inf)
     end
 
-end
 
-function resultado = f(x,S,K,i,datos)
-    resultado = ((x-S(i)-K(i))/(datos.m(i).*sqrt(2*pi).*datos.sigma(i)).*exp(-0.5.*((x-datos.mu(i))/datos.sigma(i)).^2));
 end
-
 
 function [valido, motivo] = esValido(Q, S, K, datos, tolerancia)
 % ESVALIDO  Verifica que un individuo del inventario cumpla las restricciones.
