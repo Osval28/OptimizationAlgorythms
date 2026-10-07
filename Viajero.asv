@@ -1,9 +1,11 @@
+%% PROBLEMA DEL VIAJERO (guia, secciones 3.1.1, 3.2.1, 3.3 y 3.4.1)
 % Ruta abierta: se recorren los 13 municipios una sola vez, sin volver al
 % punto de partida, y la ruta puede empezar en cualquiera de ellos.
 % Representacion: cada individuo es una fila con una permutacion de 1..13;
 % la poblacion es una matriz n x 13 y sus tiempos un vector columna n x 1.
 clear; clc;
 
+%% Datos (Tabla I de la guia, minutos; T(i,j) = tiempo de i hacia j)
 T = [  0  10  35  29  16  30  40  27  56  44  67  54  81
        6   0  32  31  16  32  34  28  52  44  63  56  83
       34  32   0  29  45  58  35  57  26  73  91  83 110
@@ -23,13 +25,13 @@ nombres = {'UCO','Rionegro','La Ceja','El Carmen','Marinilla','Guarne', ...
 
 %% Parametros
 cfg.tamanoPoblacion = 100;        % multiplo de 4 (torneos de 4 y parejas)
-cfg.iteraciones     = 100;       
+cfg.iteraciones     = 100;        % la guia pide 100 en el estudio de seleccion
 cfg.seleccion       = 'torneo';   % 'elitismo' | 'torneo' | 'ruleta'
 cfg.pm              = 0.2;        % probabilidad de que un hijo mute
 cfg.semilla         = 2026;       % prueba r usa la semilla cfg.semilla + r
-nPruebas            = 5;         
+nPruebas            = 5;          % la guia pide no menos de 5
 metodosEstudio      = {'elitismo', 'torneo', 'ruleta'};
-iteracionesEstudio  = [10 20 30 50 100 150 200];   
+iteracionesEstudio  = [10 20 30 50 100 150 200];   % las de la guia
 pmEstudio           = [0 0.05 0.1 0.2 0.5 0.8];
 carpetaResultados   = fullfile(fileparts(mfilename('fullpath')), 'resultados');
 
@@ -166,6 +168,8 @@ function [valores, tiempos, individuos, historiales] = correrPruebas(cfg, T, nPr
 end
 
 function poblacion = generarPoblacion(n, nCiudades)
+% GENERARPOBLACION  n rutas aleatorias, una por fila (guia 3.2.1).
+%   randperm garantiza que ninguna ruta repite municipios.
     poblacion = zeros(n, nCiudades);
     for i = 1:n
         poblacion(i, :) = randperm(nCiudades);
@@ -182,6 +186,9 @@ end
 
 function tiempo = calcularTiempoRuta(ruta, T)
 % CALCULARTIEMPORUTA  Minutos para recorrer la ruta en orden, sin regreso.
+%   Si la ruta no es una permutacion de 1..13 se suman 10000 minutos de
+%   penalizacion (guia 3.1.1): la suma de toda la Tabla I es 9534, asi que
+%   una ruta invalida nunca puede quedar mejor que una valida.
     PENALIZACION = 10000;
     n = size(T, 1);
     indexable = isnumeric(ruta) && all(ruta == round(ruta)) && ...
@@ -246,6 +253,7 @@ function hijo = construirHijo(base, otro, a, b)
 end
 
 function ruta = mutacionViajero(ruta, pm)
+% MUTACIONVIAJERO  Con probabilidad pm intercambia dos posiciones al azar (guia 3.4.1).
 %   El resultado sigue siendo una permutacion valida.
     if rand() < pm
         posiciones = randperm(numel(ruta), 2);       % dos posiciones distintas

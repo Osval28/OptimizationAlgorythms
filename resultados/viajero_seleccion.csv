@@ -1,0 +1,4 @@
+Configuracion,TiempoMedio_s,MejorValor,Media,DesviacionEstandar,MejorIndividuo
+elitismo,0.03408006,409,424.2,13.5535973084639,[13 12 5 10 6 1 2 7 3 9 4 8 11]
+torneo,0.04106806,409,416.8,5.3103672189407,[13 12 5 10 6 1 2 7 3 9 4 8 11]
+ruleta,0.03691612,470,489.4,13.9749776386225,[13 12 10 6 7 3 9 2 8 5 1 4 11]

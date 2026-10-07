@@ -1,6 +1,5 @@
 function indices = seleccionRuleta(valores)
 % SELECCIONRULETA  Ruleta con probabilidad inversamente proporcional al valor.
-%   P(i) = (1/valores(i)) / sum(1./valores)   (ecuacion 12 de la guia)
 %   Se gira la ruleta tantas veces como la mitad de la poblacion. Un mismo
 %   individuo puede salir mas de una vez (seleccion con reemplazo).
 %   valores: vector con el valor a minimizar de cada individuo

@@ -1,4 +1,3 @@
-% Optimizacion de inventarios (guia, seccion 3.1.3)
 % Datos de la Tabla II. Valores monetarios en miles de COP.
 datos.D     = [12000 80000 150000 50000 100000];  % ventas anuales de cada item
 datos.m     = [20 220 900 120 180];               % valor promedio de cada pedido de un cliente
