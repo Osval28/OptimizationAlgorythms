@@ -19,7 +19,7 @@ cfg.seleccion       = 'elitismo'; % 'elitismo' | 'torneo' | 'ruleta'
 cfg.alfa            = 0.5;        % extension del intervalo en BLX-alfa
 cfg.pm              = 0.2;        % probabilidad de que un hijo mute
 cfg.sigma           = 0.5;        % desviacion estandar de la mutacion
-cfg.semilla         = 2026;       % prueba r usa la semilla cfg.semilla + r
+cfg.semilla         = 2026;       % cada prueba usa cfg.semilla + numero de prueba
 cfg.limites         = limites;
 cfg.constantes      = [a b c];
 nPruebas            = 5;
@@ -183,20 +183,20 @@ end
 
 function [valores, tiempos, individuos, historiales] = correrPruebas(cfg, nPruebas)
 % CORRERPRUEBAS  Ejecuta el AG nPruebas veces con la misma configuracion.
-%   La prueba r usa la semilla cfg.semilla + r: todas las configuraciones
+%   Cada prueba usa la semilla cfg.semilla + prueba: todas las configuraciones
 %   con la misma dimension arrancan con las mismas poblaciones iniciales.
     valores = zeros(nPruebas, 1);
     tiempos = zeros(nPruebas, 1);
     individuos = zeros(nPruebas, cfg.dimensiones);
     historiales = zeros(cfg.iteraciones, nPruebas);
-    for r = 1:nPruebas
-        rng(cfg.semilla + r);
+    for prueba = 1:nPruebas
+        rng(cfg.semilla + prueba);
         reloj = tic;
         resultado = algoritmoGenetico(cfg);
-        tiempos(r) = toc(reloj);
-        valores(r) = resultado.mejorValor;
-        individuos(r, :) = resultado.mejorIndividuo;
-        historiales(:, r) = resultado.historial;
+        tiempos(prueba) = toc(reloj);
+        valores(prueba) = resultado.mejorValor;
+        individuos(prueba, :) = resultado.mejorIndividuo;
+        historiales(:, prueba) = resultado.historial;
     end
 end
 

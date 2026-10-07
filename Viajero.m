@@ -26,7 +26,7 @@ cfg.tamanoPoblacion = 100;        % multiplo de 4 (torneos de 4 y parejas)
 cfg.iteraciones     = 100;       
 cfg.seleccion       = 'torneo';   % 'elitismo' | 'torneo' | 'ruleta'
 cfg.pm              = 0.2;        % probabilidad de que un hijo mute
-cfg.semilla         = 2026;       % prueba r usa la semilla cfg.semilla + r
+cfg.semilla         = 2026;       % cada prueba usa cfg.semilla + numero de prueba
 nPruebas            = 5;         
 metodosEstudio      = {'elitismo', 'torneo', 'ruleta'};
 iteracionesEstudio  = [10 20 30 50 100 150 200];   
@@ -148,20 +148,20 @@ end
 
 function [valores, tiempos, individuos, historiales] = correrPruebas(cfg, T, nPruebas)
 % CORRERPRUEBAS  Ejecuta el AG nPruebas veces con la misma configuracion.
-%   La prueba r usa la semilla cfg.semilla + r: todas las configuraciones
+%   Cada prueba usa la semilla cfg.semilla + prueba: todas las configuraciones
 %   arrancan con las mismas poblaciones iniciales y la comparacion es justa.
     valores = zeros(nPruebas, 1);
     tiempos = zeros(nPruebas, 1);
     individuos = zeros(nPruebas, size(T, 1));
     historiales = zeros(cfg.iteraciones, nPruebas);
-    for r = 1:nPruebas
-        rng(cfg.semilla + r);
+    for prueba = 1:nPruebas
+        rng(cfg.semilla + prueba);
         reloj = tic;
         resultado = algoritmoGenetico(cfg, T);
-        tiempos(r) = toc(reloj);
-        valores(r) = resultado.mejorValor;
-        individuos(r, :) = resultado.mejorIndividuo;
-        historiales(:, r) = resultado.historial;
+        tiempos(prueba) = toc(reloj);
+        valores(prueba) = resultado.mejorValor;
+        individuos(prueba, :) = resultado.mejorIndividuo;
+        historiales(:, prueba) = resultado.historial;
     end
 end
 
