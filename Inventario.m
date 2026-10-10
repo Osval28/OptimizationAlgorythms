@@ -17,7 +17,6 @@ datos.maxS  = [200 1200 2500 800 1500];           % S_i en [0, maxS_i]
 datos.maxK  = [500 2000 5000 1500 3000];          % K_i en [0, maxK_i]
 datos.minQ  = 1;                                  % Q_i > 0: piso numerico
 datos.maxQ  = 2 * datos.I;                        % Q_i/2 no puede superar I
-
 %% Parametros del algoritmo
 cfg.tamanoPoblacion = 100;        % multiplo de 4 (torneos de 4 y parejas)
 cfg.iteraciones     = 100;
