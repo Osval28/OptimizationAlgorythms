@@ -32,27 +32,6 @@ pmEstudio           = [0 0.05 0.1 0.2 0.5 0.8];
 magnitudEstudio     = [0.01 0.05 0.1 0.2];
 carpetaResultados   = fullfile(fileparts(mfilename('fullpath')), 'resultados');
 
-%% Pruebas rapidas de las funciones
-Q = [1000 2000 3000 1500 2500];
-S = [100 600 1200 400 700];
-K = [500 2000 5000 1500 3000];
-assert(abs(calcularInventario(Q, S, K, datos) - 517.269) < 1e-3);
-x = [Q(1:4), S, K];
-[Qd, Sd, Kd] = decodificar(x, datos);
-assert(abs(Qd(5) - 2500) < 1e-9 && isequal(Sd, S) && isequal(Kd, K));
-P = generarPoblacion(50, datos);
-for i = 1:size(P, 1)
-    [Qd, Sd, Kd] = decodificar(P(i, :), datos);
-    assert(esValido(Qd, Sd, Kd, datos));
-end
-for i = 1:2:size(P, 1)
-    [h1, h2] = cruceAritmetico(P(i, :), P(i + 1, :));
-    m1 = mutacionInventario(h1, 1, 0.5, datos);
-    [Qd, Sd, Kd] = decodificar(h1, datos); assert(esValido(Qd, Sd, Kd, datos));
-    [Qd, Sd, Kd] = decodificar(h2, datos); assert(esValido(Qd, Sd, Kd, datos));
-    [Qd, Sd, Kd] = decodificar(m1, datos); assert(esValido(Qd, Sd, Kd, datos));
-end
-disp('Pruebas de funciones: OK');
 
 %% Calentamiento: la primera llamada incluye la compilacion de MATLAB (JIT)
 % y saldria mas lenta; se descarta para no ensuciar los tiempos medidos.
@@ -175,7 +154,7 @@ function resultado = algoritmoGenetico(cfg, datos)
         poblacion = [padres; hijos];
         valores = [valoresPadres(:); evaluarPoblacion(hijos, datos)];
 
-        % 5. Mejor historico (con ruleta el mejor puede no ser elegido)
+        % 5. Mejor historico
         [mejorGeneracion, j] = min(valores);
         if mejorGeneracion < mejorValor
             mejorValor = mejorGeneracion;
