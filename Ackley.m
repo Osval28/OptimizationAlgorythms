@@ -56,7 +56,7 @@ for k = 1:numel(metodosEstudio)
 end
 disp(tablaSeleccion);
 writetable(tablaSeleccion, fullfile(carpetaResultados, 'ackley_seleccion.csv'));
-[~, k] = min(tablaSeleccion.RMSE);           % criterio: menor RMSE
+[~, k] = min(tablaSeleccion.Media);          % criterio: menor promedio
 cfg.seleccion = metodosEstudio{k};
 fprintf('Seleccion elegida: %s\n', cfg.seleccion);
 
@@ -72,9 +72,9 @@ for k = 1:numel(iteracionesEstudio)
 end
 disp(tablaIteraciones);
 writetable(tablaIteraciones, fullfile(carpetaResultados, 'ackley_iteraciones.csv'));
-% Criterio: menor RMSE; si hay empate, min() toma el primero, que es la
-% menor cantidad de iteraciones (la lista esta en orden creciente).
-[~, k] = min(tablaIteraciones.RMSE);
+% Criterio: menor promedio; si hay empate, min() toma el primero, que es
+% la menor cantidad de iteraciones (la lista esta en orden creciente).
+[~, k] = min(tablaIteraciones.Media);
 cfg.iteraciones = iteracionesEstudio(k);
 fprintf('Iteraciones elegidas: %d\n', cfg.iteraciones);
 
@@ -99,7 +99,7 @@ for p = pmEstudio
 end
 disp(tablaMutacion);
 writetable(tablaMutacion, fullfile(carpetaResultados, 'ackley_mutacion.csv'));
-[~, k] = min(tablaMutacion.RMSE);
+[~, k] = min(tablaMutacion.Media);
 cfg.pm = combinaciones(k, 1);
 cfg.sigma = combinaciones(k, 2);
 fprintf('Mutacion elegida: Pm = %.2f, sigma = %.2f\n', cfg.pm, cfg.sigma);
